@@ -1,0 +1,82 @@
+
+IoT: Internet Of Things
+
+>>> 1999 yılında, Kevin Ashton tarafından şirket içi sunumda ilk defa kullanıldı.
+
+
+IoT'yi en basit şekilde tanımlamak istersek:
+
+>> Fiziksel nesnelerin oluşturduğu ağ 
+   >> Bu ağlar, basit sensörleride içerebilir, karmaşık yapılarıda,nesneleride içerebilir.
+       >> Örnek olarak evimizdeki Akıllı Televizyon, Çamaşır Makinesi veya bir fabrika içerisindeki üretim cihazıda olabilir.
+
+>> Nesneler arasındaki bağlantı üzerinden veri alışverişi yaparlar.
+
+>> Nesne: Gömülü cihazlar, sensörler, binalar, otomobiller, yazılımlar... olabilir.
+
+>> Özel haberleşme protokolleri: MQTT, CoAP ... olarak tanımlanabilir.
+   >> Bu protokollerin en büyük özelliği veri alışverişindeki süreçte bir yönetim birimi veya gateway olma özelliği sağlamasıdır.
+   >> İletişimin her zaman bağlı ve devam edilebilir olmasını sağlarlar. Böylece veriler anlık olarak cihaza aktarılabilir.
+   >> MQTT ve CoAP IP base yani IP tabanlı iletişim protokolleridir fakat enerjinin önemli olduğu yerlerde daha az güç tüketen
+      Zigbee, Bluetooth gibi teknolojiler kullanılabilir ve iletişim sağlanabilir. 
+
+
+* IoT 'den Internet of Everything (IoE) diye de bahsedilmektedir!
+
+* IoT, şu anda 90'lı yılların başındaki internet gibi...
+
+
+
+
+IoT Uygulama alanları:
+
+>> Akıllı Şehir                            >> Smart TV
+>> Akıllı Tasarım		           >> Otomativ
+>> Akıllı Ev                               >> Enerji
+>> Mobil Uygulamalar                       >> Yaşam
+>> Sağlık                                  >> Aydınlatma
+>> Elektrikli Araç Şarj Sistemleri         >> IIoT (Industrial Internet Of Things)
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+IoT Mimarisi
+
+APPLICATION  ------------->  * Mobil Uygulamalar
+                             * Web Uygulamalar
+    |                        * HTTP, WS(Web Socket)...
+    |
+    |
+    |
+
+CLOUD(Bulut)  ------------> Amazon Web Services, Microsoft Azure, Google Cloud Platform
+
+    |  **(Burada Her zaman merkezi birim Bulut olmak zorunda değil Bir Sunucu yada Gateway'de olabilir!!)
+    |
+    |
+    |
+
+IoT Cihazi   --------------> HTTP, WS, MQTT, CoAP
+                                      >> MQTT ve CoAP , HTTP gibi veri taşıyabilir, veriyi alıp verebilir, Aynı zamanda bağlantının canlı kalmasını sağlar ana birim ile!
+                                      >> MQTT her zaman açık bir kanaldır altında da Web Socket çalışır. Şu an IoT tarafında en çok kullanılan protokoldür.
+
+
+
+
+
+
+IoT Mimarisinde çıkan zorluklar:
+
+>> Cihaz-Kullanıcı Eşleştirme (Yani cihaz sadece sahibi ile haberleşmeli! Bunu bir şekilde sağlamalıyız!)
+   >> Burada eşleştirmeyi yaparken kullanıcı gereksinimleri ve cihaz gereksinimlerine göre yapmalıyız.
+
+>> Cihaz Yetkilendirme, doğrulama
+    >> Çeşitli yetkilendirme ve doğrulama mekanizmaları geliştirmek gerekebilir buda ayrı bir zorluktur.
+
+>> Cihaz Güvenliği
+   >> Donanımsal Bir güvenlik sağlaması, bu süreç zorludur ama güvenlik önlemini arttırır.
+
+>> Cihaz-Bulut Haberleşme Güvenliği
+
+>> Cihaz Yazılım Güncelleme   
+      >> Yazılım indirme, doğrulama, uzaktan güncelleme, güvenli mi?

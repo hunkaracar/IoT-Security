@@ -1,0 +1,32 @@
+
+IOT (Internet Of Things) => (Nesnelerin İnterneti)
+
+Konu Başlıkları:
+
+>> Nesnelerin İnterneti: IOT
+
+>> Uygulama Alanları
+
+>> IoT Mimarisi ve Yeni Zorluklar
+
+>> IoT Güvenliği
+    >> IoT Security Kapsamı
+    >> Genel IoT Protokolleri
+    >> Dünyada en fazla kullanılan IoT protokolü: MQTT (Message Queuing Telemetry Transport.)
+    >> MQTT 'nin yapısı
+    >> MQTT üzerindeki zafiyetler ve alınması gerekn önlemler
+
+>> OWASP Top Ten
+
+>> Cihaz Güvenliği
+
+>> Cihaz Konfigürasyon Güvenliği
+
+>> Yazılım ve Yazılım Güncelleme Güvenliği
+
+>> Güvenli Haberleşme (Cihazın Cloud ile haberleşmesi)
+
+>> Regülasyonlar ve Standartlar
+
+>> Ekosistem
+    >> IoT security hem Cloud'u hem mobili kapsıyor, tek bir cihazı kapsamaz!

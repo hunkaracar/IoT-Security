@@ -1,0 +1,249 @@
+
+IoT Security:
+
+Birbirine Bağlı|   ----------->   |Bağlı Cihazların oluşturabileceği
+Cihaz Sayısı   |   <---------- 	  |Güvenlik Açığı
+
+
+
+Yeni Güvenlik Riskleri
+-----------------------
+
+- Riskleri belirlemek için risk değerlendirme ihtiyacı
+- Test sistemlerinin ve tasarım pratiklerinin bu riskleri kapsamaması
+
+>>>> Genelde IoT cihazların en önemli güvenlik sorunları BOTNET gibi zombi cihaz üyesi olma tehlikesidir.
+     Bu cihazlar ele geçirilirse DDOS saldırıları için kullanılabilir.(MIRAI BOTNET Saldırısı)
+
+>>>> Bu cihazlar ev ve kurumsal yerlerde kullanımı gittikçe arttığı için hassas verilerin, bilgilerin veya
+     görüntülerin ele geçirilmesi kolaylaşmaktadır buda güvenlik önlemlerinin daha kompleks olmasına sebep olur.
+
+
+IoT Protokolleri:
+----------------
+
+WS (Web Services): Web hizmetleri için standart bir iletişim protokolü sağlayan XML-tabanlı bir protokoldür. 
+HTTP (HyperText Transfer Protocol): Web tarayıcıları ve sunucular arasında veri transferi için kullanılan bir iletişim protokolüdür.
+MQTT (Message Queuing Telemetry Transport): Hafif bir mesajlaşma protokolü olup, IoT cihazları arasında veri iletimi için optimizasyon sağlar.
+OCPP (Open Charge Point Protocol): Elektrikli araç şarj istasyonları arasında iletişim kurmak için standartlaştırılmış bir protokoldür.
+CoAP (Constrained Application Protocol): IoT cihazları için tasarlanmış hafif ve enerji verimli bir iletişim protokolüdür.
+
+
+
+
+=========================================================================================================================================================================================
+
+
+MQTT Tanıtımı:
+
+
+*MQTT : Message Queuing Telemetry Transport
+*Client'lar arasında mesajları alıp aktarabileceğiniz hafif bir "PUBLISH" ve "SUBSCRIBE" protokolü
+
+
+		    Publish				 Subscribe
+MQTT              ------------------>    TOPIC         -------------------> MQTT Client B
+Client A            Connect              IoT/dvc         Connect
+   
+                                      (MQTT BROKER)
+
+
+Aradaki Süreç
+------------------------
+MQTT Client A" başlangıçta MQTT broker'a (aracı sunucuya) bağlanır ve bir "TOPIC" (konu) belirleyerek bu konu üzerinde bir mesaj yayınlamak istediğini bildirir. MQTT broker, bu mesajı kabul eder ve belirlenen "TOPIC" altında saklar.
+Ardından, "MQTT Client B" da aynı MQTT broker'a bağlanır ve aynı "TOPIC" üzerinde abonelik (subscribe) işlemi gerçekleştirir. Abonelik işlemi tamamlandıktan sonra, MQTT broker, "TOPIC" altında saklanan mesajları "MQTT Client B"ye ileterek yayın yapar.
+Bu şekilde, "MQTT Client B", "MQTT Client A" tarafından yayınlanan mesajları alabilir ve işleyebilir. MQTT protokolü, bu tür yayın/abone (publish/subscribe) modeliyle IoT cihazları arasında hızlı ve etkili bir iletişim sağlar.
+
+MQTT'de bağlantı her zaman açıktır yani iletişim canlıdır!
+
+
+MQTT BROKER'lar ==> CloudMQTT, HiveMQ, mosquitto
+
+
+===========================================================================================================================================================================================
+
+MQTT Zafiyeti:
+
+MQTT protokolünde > 'TOPIC' kavramı çok önemlidir ve güvenlik açısından bu protokolde önemli bir yer teşkil eder.
+
+Zafiyet şu sebeplerden ortaya çıkar:
+
+> Topic'in ifşa olması                                                       
+> Topic'e yapılan mesajların kontrol edilmemesi
+
+(MITM ataklara karşı dirençli olmalı ve iletişim ENCRYTPED olmalı!)
+
+Sistemin HACKLENMESINE sebebiyet verebilir!
+
+
+============================================================================================================================================================================================
+
+
+MQTT Güvenliği:
+
+> Transport Layer Security (TLS): MQTT Clientl'ların MQTT Brocker (Sunucu) SSL sertifikasını doğrulaması ve trafiğin şifrelenmesi
+  (TLS'in de kendi içinde versiyonları var TLS 1.0 ve TLS 1.1 artık güvenli kabul edilmiyor ve terkedilmeye başlandı.)
+
+Eğer sertifika doğrulanırsa MITM atakları çaresiz olacaktır çünkü bununla cihazlar birbirini tanıyacak ve trafik şifrelenecektir.
+Her bağlantıda yeni anahtar oluşur şifrleme için(AES KEY) eski anahtarı bilsek bile yeni oluşan bir bağlantıda ve durumda şifreyi kırmamız
+seneler sürebilir.(AES 128-256 bitlik bir şifreleme gücü sağlar! Bu da baya bir işlem gücü demek! )
+
+
+Yapılması Gerekenler:
+
+>>> Sunucu için Trusted CA SSL Sertifika
+>>> SSL sertifikayı doğrulayacak olan Root(kök) Sertifika IoT cihaza implement edilmesi
+>>> Trust Manager implemente edilmesi(uygulanması)
+
+
+
+
+* MQTT Client'in Doğrulanması
+  
+   > Username/Password
+   > SSL Client Sertifikası
+   > Mutual Authenctication
+
+
+Burada Username/Password kullanılması yerine SSL sertifikalı doğrulama yöntemi veya Multi Authentication yöntemi kullanılmalıdır.
+Çünkü UserName ve password genelde "DEFAULT" bırakıldığı yada kolay yapıldığı düşünülürse ele geçirilebilir ama SSL sertifikasında
+sürecin şifrelenmesi daha iyi bir güvenlik sağlar fakat bu da Mobil Uygulamalarda geçerli bir durum değildir!
+
+
+MQTT Broker ---> Authentication Server bağlıdır!
+
+
+
+
+* MQTT Client yetkilendirilmesi
+  
+  > Topic erişiminin kontrol edilmesi
+  > Kural Tabanlı
+
+
+==> Burada her Client'e kurallar uygulanır ve ona göre hareket etmesi istenir böylelikle saldırganların topiclere yapacakları saldırılar
+    kısıtlanmış veya önlemiş olur! (Publish ve Subscribe'ları tanımlamak!)
+
+
+MQTT Broker ----> Kuralları takip eden sistem
+
+
+Yapılması Gerekenler:
+
+>> Kural kontrol biriminin tasarımı
+>> Kuralların yazılması
+
+
+=============================================================================================================================================================================================================================
+
+En çok görülen IoT Cihaz Zafiyetleri:
+
+1- Cihaz Güvenliği
+2- Cihaz Konfigürasyon 
+3- Yazılım Güncelleme
+4- Güvenli Haberleşme
+5- Kişisel veri koruma ve Regülasyonlar
+6- Ekosistem
+
+
+1.Cihaz Güvenliği
+--------------------
+
+* Fiziksel Güvenlik
+
+  - Debug/Test Arayüzleri
+  - USB gibi kullanıcı arayüzleri
+
+
+* Ağ Servisleri
+
+  - TCP/UDP Listen Port
+  - UPnP, Dial gibi protokolleri ve servisler
+  - Lokal ağ servisleri erişimde güçlü şifre (Telnet, SSH, FTP gibi)
+  - Third Party Uygulamalar (Çalışması için farklı kütüphanelere sahip olan uygulamalar)
+
+
+
+2.Cihaz Konfigürasyonu
+------------------------
+
+> DEFAULT username/Password, Credentials, URL
+> Her cihaz için unique, password, sertfika
+> Brute force karşı önlem (Rate Limiting)
+> Doğrulanmış/yetkili kaynak -> Konfigürasyon parametreleri
+> Bu parametreler yetkisiz değiştirilmemelidir.
+
+
+Biz parametrelerimizi aşağıdaki teknolojileri kullanarak aktarabiliriz: (IoT cihazlara veri aktarımı yaparken!)
+
+>> WIFI, Blue, NFC
+
+
+
+3.Yazılım Güncelleme Güvenliği
+-------------------------------
+								       Yazılım Yükleme İşi
+> Zaafiyet bulunmamalı							------------------
+> Güncel kütüphane (up-to-date)
+> Onaylı cihaz -> Yazılım Yükleme                                          Firmware (HASH PROCESS (SHA-256,384)) <-----------------> HASH
+> Yazılım asimetrik algoritmalar ile imzalanmalı										       |
+> Haberleşme Kanalı Güvenli												Sign İşlemi    |RSA
+> Bu parametreler yetkisiz değiştirilmemelidir.											       |
+                                                                                                                                    SIGNATURE
+										FIRMWARE
+										Signature <---------------------------------------->	
+
+
+
+Bu güncellemeler güvenli bir UPDATE SUNUCUSU ile birlikte haberleşilerek yapılmalıdır.
+HASH signature ile yazılımlar tam bir güvenlik sağlamayabilirler bunun için güçlü güvenlik
+testlerinede tabii tutulmalıdır!
+
+
+					Güvenli Haberleşme
+(IoT Cihazlar)   <-------------------------------------------------------------------------> Update Sunucusu
+İmza,Public Key ile Doğrulandıktan sonra
+yazılım Yükleme
+
+
+
+
+
+4.Haberleşme Güvenliği
+------------------------
+
+> Wi-Fi bağlantısı için WPA2/WPA3											Güvenli Haberleşme
+> Tüm cloud-cihaz haberleşmesi
+  - TLS/DTLS (En son version)							IoT Cihazı       <---------------------------WI-FI-------------------------> IoT Cloud
+  - Güçlü cipher suit desteği						       (SSL Konfigürasyonu)
+
+> Güncel kütüphane (up-to-date)
+> Root (kök) sertifikalarının cihaza gömülmesi
+
+				
+
+
+
+6. Ekosistem
+-----------------
+
+- Yetkilendirme ve Doğrulama						- Mobil/WEB uygulama güvenliği
+   (Authorization & Authentication)                                     - Cloud Güvenliği
+   - Kullanıcı Doğrulama                                                  - OWASP Serveless API Top 10
+   - Password policy                                                    - Son-Kullanıcı Güvenliği
+   - Cihaz doğrulama
+
+
+
+
+
+
+
+
+SONUÇ
+-------------
+
+Genel olarak IoT güvenliği, cihazların, ağların ve verilerin korunması için kritik öneme sahiptir.
+Güvenli IoT uygulamaları için cihazların güçlü kimlik doğrulama yöntemleriyle korunması, güvenli yazılım güncellemeleri ile periyodik olarak güncellenmesi ve şifreleme tekniklerinin kullanılması gerekmektedir.
+Ayrıca, ağ trafiğinin izlenmesi ve anormal aktivitelerin tespit edilmesi için güvenlik izleme sistemleriyle sürekli gözetim sağlanmalıdır.
+
